@@ -1,4 +1,10 @@
-# CUDA Programming Notes
+# CUDA Programming Notes 📝
+
+## 📚 Resources
+
+- [Modal GPU Glossary](https://modal.com/gpu-glossary)
+- [Triton Tutorials](https://triton-lang.org/main/getting-started/tutorials/)
+
 
 ## General concepts
 
@@ -12,18 +18,14 @@
 ## Vector Reduction 
 
 * On the host, they are PyTorch tensors. When you call the kernel, Triton passes device pointers to their first elements to the JIT’ed kernel. Inside the kernel you indeed work with pointers.
-
-* num_programs is the size of the grid along axis 0 (so your grid is (num_programs,)). A grid can be 1D/2D/3D, but here it’s 1D.
-
-* In Triton, BLOCK_SIZE is not a thread count. It’s a compile-time tile size = number of elements each program processes (drives the shape of tl.arange, masks, vector loads/stores).
-
+* num_programs is the size of the grid along axis 0 (so your grid is (num_programs,)). A grid can be `1D/2D/3D`, but here it’s 1D.
+* In Triton, `BLOCK_SIZE` is not a thread count. It’s a compile-time tile size = number of elements each program processes (drives the shape of tl.arange, masks, vector loads/stores).
 * in Triton, num_warps sets how many hardware threads run a program (block), while BLOCK_SIZE sets how many data elements that program processes.
 
 ### How they combine
 
 * Threads per program (CTA) = num_warps × 32
 e.g., `num_warps=4` → 128 threads.
-
 
 * `Elements per program = BLOCK_SIZE`
 e.g., BLOCK_SIZE=512 → 512 elements handled by that same program.
