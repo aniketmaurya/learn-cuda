@@ -32,4 +32,3 @@ e.g., BLOCK_SIZE=512 → 512 elements handled by that same program.
 
 So with `num_warps=4` and `BLOCK_SIZE=512`, you have 128 threads processing 512 elements.
 On average: 4 elements per thread (`512 / 128 = 4`).
-

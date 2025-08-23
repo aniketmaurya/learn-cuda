@@ -38,7 +38,6 @@ def reduce_sum_triton(x: torch.Tensor, block_size: int = 512, num_warps: int = 4
     num_programs = triton.cdiv(n, block_size)
     partials = torch.empty(num_programs, device=x.device, dtype=torch.float32)
 
-    # ✅ Correct 1D grid: (num_programs,)
     reduce_kernel[(num_programs,)](
         x, n, partials,
         BLOCK_SIZE=block_size,
@@ -57,7 +56,7 @@ if __name__ == "__main__":
     x = torch.randn(100_000, device="cuda", dtype=torch.float32).contiguous()
 
     # Triton reduction
-    triton_sum = reduce_sum_triton(x, block_size=512, num_warps=4)
+    triton_sum = reduce_sum_triton(x, block_size=128, num_warps=4)
     # PyTorch baseline
     torch_sum = x.sum()
 
