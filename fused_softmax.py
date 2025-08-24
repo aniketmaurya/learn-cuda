@@ -32,8 +32,8 @@ def softmax(x):
     return y
 
 if __name__=="__main__":
-    x = torch.randn(1823, 768).cuda()
-    y1 = torch.softmax(x, axis=1)   
-    y2 = softmax(x)
-    print(y1)
-    print(y2)
+    torch.manual_seed(0)
+    x = torch.randn(1823, 781).cuda()
+    y_triton = softmax(x)
+    y_torch = torch.softmax(x, axis=1)
+    assert torch.allclose(y_triton, y_torch), (y_triton, y_torch)
